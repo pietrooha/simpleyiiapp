@@ -28,7 +28,7 @@ class MessageController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('admin', 'index','view', 'delete'),
+				'actions'=>array('index','view', 'delete'),
 				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
@@ -72,7 +72,7 @@ class MessageController extends Controller
 			'dataProvider'=>$dataProvider,
 		));
 	}
-	
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

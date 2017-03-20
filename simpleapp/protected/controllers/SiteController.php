@@ -21,6 +21,19 @@ class SiteController extends Controller
 		);
 	}
 
+	public function accessRules()
+	{
+		return array(
+			array('allow',  // allow all users to perform 'index' and 'view' actions
+				'actions'=>array('contact'),
+				'users'=>array('@'),
+			),
+			array('deny',  // deny all users
+				'users'=>array('*'),
+			),
+		);
+	}	
+
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.
@@ -70,8 +83,8 @@ class SiteController extends Controller
 						"MIME-Version: 1.0\r\n".
 						"Content-Type: text/plain; charset=UTF-8";
 
-					mail(Yii::app()->params['adminEmail'],$subject,$model->body,$headers);
-					mail(Yii::app()->email, 'INFO',
+					mail(Yii::app()->params['adminEmail'],'INFO','Pojawił się nowy kontakt. Zaloguj się, aby przeczytać',$headers);
+					mail(Yii::app()->user->email, 'INFO',
 						'Formularz został dostarczony do BOK',$headers);					
 					Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
 					$this->refresh();
@@ -108,7 +121,7 @@ class SiteController extends Controller
                         	}
                         	else
                         	{
-                                $this->redirect(Yii::app()->user->returnUrl);
+                                $this->redirect(Yii::app()->createUrl('site/contact'));
                         	}
 			}
 		}
@@ -129,7 +142,7 @@ class SiteController extends Controller
 
 			if($model->validate())
 				if($model->save())
-					$this->redirect(Yii::app()->user->returnUrl);
+					$this->redirect(Yii::app()->createUrl('site/login'));
 		}
 
 		$this->render('signup', array('model'=>$model));
